@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:characterapp/app/data/providers/api_provider.dart';
 import 'package:characterapp/app/data/providers/db_helper.dart';
@@ -10,7 +11,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:hive/hive.dart';
 
 Map<String, dynamic> _character(int id, String name, String status) => {
       'id': id,
@@ -78,7 +79,7 @@ class FakeApi {
 }
 
 Future<void> _settle(WidgetTester tester) async {
-  // SQLite melakukan I/O sungguhan, sedangkan widget test memakai jam palsu.
+  // Hive melakukan I/O sungguhan, sedangkan widget test memakai jam palsu.
   // Jadi beri waktu nyata dan pump bergantian sampai operasi DB selesai.
   for (var i = 0; i < 8; i++) {
     await tester.runAsync(
@@ -98,17 +99,19 @@ final favoriteCards = find.descendant(
 void main() {
   late FakeApi api;
 
+  late Directory hiveDir;
+
   setUpAll(() {
-    sqfliteFfiInit();
-    databaseFactory = databaseFactoryFfiNoIsolate;
+    hiveDir = Directory.systemTemp.createTempSync('hive_test');
+    Hive.init(hiveDir.path);
   });
+
 
   setUp(() async {
     Get.reset();
     SharedPreferences.setMockInitialValues({});
-    await databaseFactory.deleteDatabase(
-      '${await databaseFactory.getDatabasesPath()}/rick_morty.db',
-    );
+    // Box baru untuk tiap tes, supaya data akun antar-tes tidak tercampur.
+    DbHelper.boxName = 'users_${DateTime.now().microsecondsSinceEpoch}';
     api = FakeApi();
   });
 
@@ -153,7 +156,9 @@ void main() {
   });
 
   testWidgets('username yang sama tidak bisa didaftarkan dua kali', (tester) async {
-    await tester.runAsync(() => DbHelper().register('gevin', 'rahasia1'));
+    await tester.runAsync(() async {
+      await (await DbHelper().init()).register('gevin', 'rahasia1');
+    });
     await startApp(tester);
     await tester.tap(find.text('Daftar'));
     await _settle(tester);

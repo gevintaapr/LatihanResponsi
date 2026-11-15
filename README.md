@@ -9,13 +9,13 @@ flutter pub get
 flutter run
 ```
 
-Jalankan di emulator/perangkat Android atau iOS (SQLite lokal tidak tersedia di web).
+Bisa dijalankan di Chrome (`flutter run -d chrome`) maupun di Android/iOS.
 
 ## Fitur
 
 | Soal | Implementasi |
 | --- | --- |
-| Login & Register | Akun disimpan di SQLite (`sqflite`, password di-hash SHA-256); sesi login disimpan di Shared Preferences |
+| Login & Register | Akun disimpan di Hive (password di-hash SHA-256); sesi login disimpan di Shared Preferences |
 | Logout | Tombol di AppBar, kembali ke halaman login dan menghapus sesi |
 | Home | List karakter (foto, nama, status), tombol favorit, filter All/Alive/Dead/Unknown, infinite scroll, pull-to-refresh |
 | Detail | Foto, nama, status, spesies, gender, origin, location; tombol favorit dengan ikon yang berubah + Snackbar |
@@ -32,7 +32,7 @@ lib/
 └── app/
     ├── data/
     │   ├── models/                # Character, Episode
-    │   ├── providers/             # ApiProvider (http), DbHelper (sqflite)
+    │   ├── providers/             # ApiProvider (http), DbHelper (Hive)
     │   └── services/              # SessionService (Shared Preferences)
     ├── modules/
     │   ├── auth/                  # login, register, AuthController
@@ -53,4 +53,4 @@ lib/
 flutter test
 ```
 
-`test/app_flow_test.dart` menjalankan alur lengkap aplikasi dengan API tiruan dan SQLite sungguhan.
+`test/app_flow_test.dart` menjalankan alur lengkap aplikasi dengan API tiruan dan Hive sungguhan.

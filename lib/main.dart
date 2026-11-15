@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 import 'app/data/providers/api_provider.dart';
 import 'app/data/providers/db_helper.dart';
@@ -11,6 +12,8 @@ import 'app/utils/snack.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // Siapkan Hive (file di Android/iOS, IndexedDB di Chrome).
+  await Hive.initFlutter();
   await initDependencies();
   runApp(const MainApp());
 }
@@ -19,7 +22,7 @@ Future<void> main() async {
 Future<void> initDependencies({ApiProvider? api}) async {
   // Sesi harus selesai dibaca dulu, karena menentukan halaman pertama.
   await Get.putAsync(() => SessionService().init(), permanent: true);
-  Get.put(DbHelper(), permanent: true);
+  await Get.putAsync(() => DbHelper().init(), permanent: true);
   Get.put(api ?? ApiProvider(), permanent: true);
   Get.put(FavoriteController(), permanent: true);
 }

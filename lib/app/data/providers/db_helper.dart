@@ -1,29 +1,25 @@
 import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
-import 'package:path/path.dart' as p;
-import 'package:sqflite/sqflite.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
-/// Local database (SQLite) untuk menyimpan akun pengguna.
+/// Local database (Hive) untuk menyimpan akun pengguna.
+///
+/// Hive berjalan di Android/iOS (disimpan sebagai file) dan juga di Chrome
+/// (disimpan di IndexedDB browser), jadi aplikasi bisa dijalankan di keduanya.
+///
+/// Setiap akun disimpan di box `users` dengan key = username:
+///   'gevin' -> {'username': 'gevin', 'password': '<hash>', 'created_at': '...'}
 class DbHelper {
-  static const _dbName = 'rick_morty.db';
-  static const _table = 'users';
+  /// Nama box Hive. Hanya diganti oleh tes supaya tiap tes memakai box baru.
+  static String boxName = 'users';
 
-  Database? _db;
+  late Box<Map> _box;
 
-  Future<Database> get _database async {
-    return _db ??= await openDatabase(
-      p.join(await getDatabasesPath(), _dbName),
-      version: 1,
-      onCreate: (db, _) => db.execute('''
-        CREATE TABLE $_table (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          username TEXT NOT NULL UNIQUE,
-          password TEXT NOT NULL,
-          created_at TEXT NOT NULL
-        )
-      '''),
-    );
+  /// Membuka box. Dipanggil sekali saat aplikasi dimulai (lihat main.dart).
+  Future<DbHelper> init() async {
+    _box = await Hive.openBox<Map>(boxName);
+    return this;
   }
 
   /// Password tidak disimpan sebagai teks asli, tetapi hash SHA-256.
@@ -35,15 +31,8 @@ class DbHelper {
   /// Mengembalikan `false` jika username sudah terdaftar.
   Future<bool> register(String username, String password) async {
     final name = _normalize(username);
-    final db = await _database;
-    final existing = await db.query(
-      _table,
-      where: 'username = ?',
-      whereArgs: [name],
-      limit: 1,
-    );
-    if (existing.isNotEmpty) return false;
-    await db.insert(_table, {
+    if (_box.containsKey(name)) return false;
+    await _box.put(name, {
       'username': name,
       'password': _hash(name, password),
       'created_at': DateTime.now().toIso8601String(),
@@ -54,13 +43,7 @@ class DbHelper {
   /// Mengembalikan `true` jika username dan password cocok.
   Future<bool> login(String username, String password) async {
     final name = _normalize(username);
-    final db = await _database;
-    final rows = await db.query(
-      _table,
-      where: 'username = ? AND password = ?',
-      whereArgs: [name, _hash(name, password)],
-      limit: 1,
-    );
-    return rows.isNotEmpty;
+    final user = _box.get(name);
+    return user != null && user['password'] == _hash(name, password);
   }
 }

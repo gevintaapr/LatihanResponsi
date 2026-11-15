@@ -77,18 +77,19 @@ class AppTheme {
   static const fontFamily = 'PlusJakartaSans';
 
   static ThemeData get light {
-    final scheme = ColorScheme.fromSeed(
-      seedColor: AppColors.purple,
-      brightness: Brightness.light,
-    ).copyWith(
-      primary: AppColors.purple,
-      onPrimary: Colors.white,
-      secondary: AppColors.pink,
-      tertiary: AppColors.yellow,
-      surface: Colors.white,
-      onSurface: AppColors.text,
-      error: AppColors.dead,
-    );
+    final scheme =
+        ColorScheme.fromSeed(
+          seedColor: AppColors.purple,
+          brightness: Brightness.light,
+        ).copyWith(
+          primary: AppColors.purple,
+          onPrimary: Colors.white,
+          secondary: AppColors.pink,
+          tertiary: AppColors.yellow,
+          surface: Colors.white,
+          onSurface: AppColors.text,
+          error: AppColors.dead,
+        );
     final radius = BorderRadius.circular(AppRadius.sm + 2);
     final base = ThemeData(
       useMaterial3: true,
@@ -112,7 +113,7 @@ class AppTheme {
         centerTitle: false,
         titleTextStyle: TextStyle(
           fontFamily: fontFamily,
-          fontSize: 24,
+          fontSize: 26,
           fontWeight: FontWeight.w800,
           color: AppColors.text,
         ),
@@ -123,8 +124,10 @@ class AppTheme {
         hintStyle: const TextStyle(color: AppColors.textMuted),
         prefixIconColor: AppColors.textMuted,
         suffixIconColor: AppColors.textMuted,
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 13,
+        ),
         border: OutlineInputBorder(
           borderRadius: radius,
           borderSide: const BorderSide(color: AppColors.glassBorder),

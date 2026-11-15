@@ -12,9 +12,9 @@ class Episode {
   });
 
   factory Episode.fromJson(Map<String, dynamic> json) => Episode(
-        id: (json['id'] as num?)?.toInt() ?? 0,
-        name: json['name']?.toString() ?? '-',
-        airDate: json['air_date']?.toString() ?? '-',
-        code: json['episode']?.toString() ?? '',
-      );
+    id: (json['id'] as num?)?.toInt() ?? 0,
+    name: json['name']?.toString() ?? '-',
+    airDate: json['air_date']?.toString() ?? '-',
+    code: json['episode']?.toString() ?? '',
+  );
 }

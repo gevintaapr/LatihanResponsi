@@ -15,6 +15,7 @@ class CharacterImage extends StatelessWidget {
     this.radius = AppRadius.sm,
     this.width,
     this.height,
+    this.alignment = Alignment.center,
   });
 
   final String url;
@@ -22,20 +23,23 @@ class CharacterImage extends StatelessWidget {
   final double? width;
   final double? height;
 
+  /// Bagian foto yang dipertahankan saat dipotong (topCenter = wajah).
+  final Alignment alignment;
+
   @override
   Widget build(BuildContext context) {
     Widget placeholder(IconData icon) => Container(
-          width: width,
-          height: height,
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [Color(0xFFF3E8FF), Color(0xFFFCE7F3)],
-            ),
-          ),
-          child: Icon(icon, color: AppColors.purple.withValues(alpha: 0.5)),
-        );
+      width: width,
+      height: height,
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [Color(0xFFF3E8FF), Color(0xFFFCE7F3)],
+        ),
+      ),
+      child: Icon(icon, color: AppColors.purple.withValues(alpha: 0.5)),
+    );
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(radius),
@@ -44,6 +48,7 @@ class CharacterImage extends StatelessWidget {
         width: width,
         height: height,
         fit: BoxFit.cover,
+        alignment: alignment,
         loadingBuilder: (_, child, progress) =>
             progress == null ? child : placeholder(Icons.image_outlined),
         errorBuilder: (_, _, _) => placeholder(Icons.person_off_outlined),
@@ -71,7 +76,9 @@ class StatusLabel extends StatelessWidget {
           decoration: BoxDecoration(
             color: color,
             shape: BoxShape.circle,
-            boxShadow: [BoxShadow(color: color.withValues(alpha: 0.5), blurRadius: 6)],
+            boxShadow: [
+              BoxShadow(color: color.withValues(alpha: 0.5), blurRadius: 6),
+            ],
           ),
         ),
         const SizedBox(width: 6),
@@ -82,7 +89,7 @@ class StatusLabel extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
             style: const TextStyle(
               color: AppColors.textMuted,
-              fontSize: 12.5,
+              fontSize: 11.5,
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -121,7 +128,9 @@ class FavoriteButton extends StatelessWidget {
                 transitionBuilder: (child, anim) =>
                     ScaleTransition(scale: anim, child: child),
                 child: Icon(
-                  isFav ? Icons.favorite_rounded : Icons.favorite_border_rounded,
+                  isFav
+                      ? Icons.favorite_rounded
+                      : Icons.favorite_border_rounded,
                   key: ValueKey(isFav),
                   size: size * 0.52,
                   color: isFav ? AppColors.favorite : AppColors.textMuted,
@@ -144,8 +153,8 @@ class CharacterGridCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GlassContainer(
-      radius: AppRadius.md + 2,
-      padding: const EdgeInsets.all(8),
+      radius: AppRadius.md,
+      padding: const EdgeInsets.all(6),
       onTap: () => Get.toNamed(Routes.detail, arguments: character),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -154,18 +163,22 @@ class CharacterGridCard extends StatelessWidget {
             child: Stack(
               children: [
                 Positioned.fill(
-                  child: CharacterImage(url: character.image, radius: AppRadius.md - 4),
+                  child: CharacterImage(
+                    url: character.image,
+                    radius: AppRadius.sm,
+                    alignment: const Alignment(0, -0.4),
+                  ),
                 ),
                 Positioned(
-                  top: 6,
-                  right: 6,
-                  child: FavoriteButton(character: character, size: 34),
+                  top: 5,
+                  right: 5,
+                  child: FavoriteButton(character: character, size: 30),
                 ),
               ],
             ),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(6, 10, 6, 4),
+            padding: const EdgeInsets.fromLTRB(4, 8, 4, 2),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -173,10 +186,16 @@ class CharacterGridCard extends StatelessWidget {
                   character.name,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(fontSize: 14.5, fontWeight: FontWeight.w700),
+                  style: const TextStyle(
+                    fontSize: 13.5,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
-                const SizedBox(height: 4),
-                StatusLabel(status: character.status, suffix: character.species),
+                const SizedBox(height: 3),
+                StatusLabel(
+                  status: character.status,
+                  suffix: character.species,
+                ),
               ],
             ),
           ),
@@ -196,11 +215,11 @@ class CharacterTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return GlassContainer(
       radius: AppRadius.md,
-      padding: const EdgeInsets.all(10),
+      padding: const EdgeInsets.all(8),
       onTap: () => Get.toNamed(Routes.detail, arguments: character),
       child: Row(
         children: [
-          CharacterImage(url: character.image, width: 64, height: 64),
+          CharacterImage(url: character.image, width: 52, height: 52),
           const SizedBox(width: 14),
           Expanded(
             child: Column(
@@ -210,15 +229,21 @@ class CharacterTile extends StatelessWidget {
                   character.name,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+                  style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
-                const SizedBox(height: 6),
-                StatusLabel(status: character.status, suffix: character.species),
+                const SizedBox(height: 4),
+                StatusLabel(
+                  status: character.status,
+                  suffix: character.species,
+                ),
               ],
             ),
           ),
-          FavoriteButton(character: character),
-          const SizedBox(width: 4),
+          FavoriteButton(character: character, size: 34),
+          const SizedBox(width: 2),
         ],
       ),
     );

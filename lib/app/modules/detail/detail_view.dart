@@ -13,20 +13,20 @@ class DetailView extends GetView<DetailController> {
   const DetailView({super.key});
 
   PreferredSizeWidget _appBar() => AppBar(
-        automaticallyImplyLeading: false,
-        titleSpacing: 16,
-        title: Row(
-          children: [
-            GlassIconButton(
-              icon: Icons.arrow_back_rounded,
-              tooltip: 'Kembali',
-              onPressed: Get.back,
-            ),
-            const SizedBox(width: 14),
-            const Text('Detail Karakter', style: TextStyle(fontSize: 20)),
-          ],
+    automaticallyImplyLeading: false,
+    titleSpacing: 16,
+    title: Row(
+      children: [
+        GlassIconButton(
+          icon: Icons.arrow_back_rounded,
+          tooltip: 'Kembali',
+          onPressed: Get.back,
         ),
-      );
+        const SizedBox(width: 14),
+        const Text('Detail Karakter', style: TextStyle(fontSize: 18)),
+      ],
+    ),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +54,7 @@ class DetailView extends GetView<DetailController> {
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: _FavoriteAction(character: character),
         body: ListView(
-          padding: const EdgeInsets.fromLTRB(16, 8, 16, 120),
+          padding: const EdgeInsets.fromLTRB(16, 4, 16, 100),
           children: [
             Center(
               child: ConstrainedBox(
@@ -62,7 +62,12 @@ class DetailView extends GetView<DetailController> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    _Photo(character: character),
+                    Center(
+                      child: SizedBox(
+                        width: 220,
+                        child: _Photo(character: character),
+                      ),
+                    ),
                     if (controller.isLoading.value)
                       const Padding(
                         padding: EdgeInsets.only(top: 12),
@@ -71,34 +76,35 @@ class DetailView extends GetView<DetailController> {
                           borderRadius: BorderRadius.all(Radius.circular(4)),
                         ),
                       ),
-                    const SizedBox(height: 22),
+                    const SizedBox(height: 16),
                     Text(
                       character.name,
                       textAlign: TextAlign.center,
                       style: const TextStyle(
-                        fontSize: 28,
+                        fontSize: 23,
                         fontWeight: FontWeight.w800,
                         height: 1.15,
                       ),
                     ),
-                    const SizedBox(height: 6),
+                    const SizedBox(height: 4),
                     Text(
                       '${character.species} · ${character.gender}',
                       textAlign: TextAlign.center,
                       style: const TextStyle(
+                        fontSize: 13,
                         color: AppColors.textMuted,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 10),
                     Center(child: _StatusPill(status: character.status)),
                     if (error != null) ...[
                       const SizedBox(height: 16),
                       _ErrorBanner(message: error, onRetry: controller.fetch),
                     ],
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 20),
                     const _SectionTitle('Identitas'),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 10),
                     // Info pendek: grid 2 kolom.
                     Row(
                       children: [
@@ -144,9 +150,9 @@ class DetailView extends GetView<DetailController> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 20),
                     const _SectionTitle('Asal & Lokasi'),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 10),
                     // Info panjang: kartu selebar layar.
                     _WideInfoTile(
                       icon: Icons.public_rounded,
@@ -179,9 +185,9 @@ class _Photo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(8),
+      padding: const EdgeInsets.all(6),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(AppRadius.lg + 4),
+        borderRadius: BorderRadius.circular(AppRadius.lg),
         color: AppColors.glass,
         border: Border.all(color: AppColors.glassBorder, width: 1.2),
         boxShadow: [
@@ -194,7 +200,7 @@ class _Photo extends StatelessWidget {
       ),
       child: AspectRatio(
         aspectRatio: 1,
-        child: CharacterImage(url: character.image, radius: AppRadius.lg - 4),
+        child: CharacterImage(url: character.image, radius: AppRadius.md),
       ),
     );
   }
@@ -209,7 +215,7 @@ class _StatusPill extends StatelessWidget {
   Widget build(BuildContext context) {
     final color = AppColors.status(status);
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: 0.7),
         borderRadius: BorderRadius.circular(999),
@@ -224,13 +230,19 @@ class _StatusPill extends StatelessWidget {
             decoration: BoxDecoration(
               color: color,
               shape: BoxShape.circle,
-              boxShadow: [BoxShadow(color: color.withValues(alpha: 0.6), blurRadius: 8)],
+              boxShadow: [
+                BoxShadow(color: color.withValues(alpha: 0.6), blurRadius: 8),
+              ],
             ),
           ),
           const SizedBox(width: 8),
           Text(
             status.capitalizeFirst ?? status,
-            style: TextStyle(color: color, fontWeight: FontWeight.w800),
+            style: TextStyle(
+              color: color,
+              fontWeight: FontWeight.w800,
+              fontSize: 13,
+            ),
           ),
         ],
       ),
@@ -249,7 +261,7 @@ class _SectionTitle extends StatelessWidget {
       children: [
         Container(
           width: 4,
-          height: 18,
+          height: 16,
           decoration: BoxDecoration(
             gradient: AppGradients.primary,
             borderRadius: BorderRadius.circular(4),
@@ -258,7 +270,7 @@ class _SectionTitle extends StatelessWidget {
         const SizedBox(width: 10),
         Text(
           text,
-          style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w800),
+          style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800),
         ),
       ],
     );
@@ -284,30 +296,36 @@ class _InfoTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GlassContainer(
-      radius: AppRadius.md,
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      radius: AppRadius.md - 2,
+      padding: const EdgeInsets.all(12),
+      child: Row(
         children: [
-          GradientIcon(icon: icon, size: 40, gradient: gradient),
-          const SizedBox(height: 14),
-          Text(
-            label,
-            style: const TextStyle(
-              color: AppColors.textMuted,
-              fontSize: 12.5,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          const SizedBox(height: 2),
-          Text(
-            value,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w800,
-              color: valueColor ?? AppColors.text,
+          GradientIcon(icon: icon, size: 34, gradient: gradient),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  label,
+                  style: const TextStyle(
+                    color: AppColors.textMuted,
+                    fontSize: 11.5,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  value,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w800,
+                    color: valueColor ?? AppColors.text,
+                  ),
+                ),
+              ],
             ),
           ),
         ],
@@ -333,12 +351,12 @@ class _WideInfoTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GlassContainer(
-      radius: AppRadius.md,
-      padding: const EdgeInsets.all(14),
+      radius: AppRadius.md - 2,
+      padding: const EdgeInsets.all(12),
       child: Row(
         children: [
-          GradientIcon(icon: icon, size: 44, gradient: gradient),
-          const SizedBox(width: 14),
+          GradientIcon(icon: icon, size: 34, gradient: gradient),
+          const SizedBox(width: 10),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -347,14 +365,17 @@ class _WideInfoTile extends StatelessWidget {
                   label,
                   style: const TextStyle(
                     color: AppColors.textMuted,
-                    fontSize: 12.5,
+                    fontSize: 11.5,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
                 const SizedBox(height: 2),
                 Text(
                   value,
-                  style: const TextStyle(fontSize: 15.5, fontWeight: FontWeight.w800),
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w800,
+                  ),
                 ),
               ],
             ),
@@ -379,7 +400,11 @@ class _ErrorBanner extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(14, 6, 6, 6),
       child: Row(
         children: [
-          const Icon(Icons.error_outline_rounded, color: AppColors.dead, size: 20),
+          const Icon(
+            Icons.error_outline_rounded,
+            color: AppColors.dead,
+            size: 20,
+          ),
           const SizedBox(width: 10),
           Expanded(
             child: Text(
@@ -414,7 +439,9 @@ class _FavoriteAction extends StatelessWidget {
           gradient: isFav ? null : AppGradients.primary,
           color: isFav ? Colors.white.withValues(alpha: 0.9) : null,
           border: Border.all(
-            color: isFav ? AppColors.favorite.withValues(alpha: 0.4) : Colors.transparent,
+            color: isFav
+                ? AppColors.favorite.withValues(alpha: 0.4)
+                : Colors.transparent,
           ),
           boxShadow: [
             BoxShadow(
@@ -431,12 +458,14 @@ class _FavoriteAction extends StatelessWidget {
             borderRadius: borderRadius,
             onTap: () => favorites.toggle(character),
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 13),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Icon(
-                    isFav ? Icons.favorite_rounded : Icons.favorite_border_rounded,
+                    isFav
+                        ? Icons.favorite_rounded
+                        : Icons.favorite_border_rounded,
                     color: isFav ? AppColors.favorite : Colors.white,
                   ),
                   const SizedBox(width: 10),
@@ -444,7 +473,7 @@ class _FavoriteAction extends StatelessWidget {
                     isFav ? 'Hapus dari Favorit' : 'Tambah ke Favorit',
                     style: TextStyle(
                       fontWeight: FontWeight.w700,
-                      fontSize: 15,
+                      fontSize: 14,
                       color: isFav ? AppColors.favorite : Colors.white,
                     ),
                   ),

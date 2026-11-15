@@ -46,13 +46,17 @@ class AuthScaffold extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   const Center(
-                    child: GradientIcon(icon: Icons.blur_on_rounded, size: 84),
+                    child: GradientIcon(icon: Icons.blur_on_rounded, size: 68),
                   ),
-                  const SizedBox(height: 22),
+                  const SizedBox(height: 18),
                   Text(
                     title,
                     textAlign: TextAlign.center,
-                    style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w800, height: 1.15),
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w800,
+                      height: 1.15,
+                    ),
                   ),
                   const SizedBox(height: 8),
                   Text(
@@ -60,11 +64,11 @@ class AuthScaffold extends StatelessWidget {
                     textAlign: TextAlign.center,
                     style: const TextStyle(color: AppColors.textMuted),
                   ),
-                  const SizedBox(height: 28),
+                  const SizedBox(height: 22),
                   GlassContainer(
                     blur: true,
                     radius: AppRadius.lg,
-                    padding: const EdgeInsets.all(20),
+                    padding: const EdgeInsets.all(18),
                     child: child,
                   ),
                 ],

@@ -14,43 +14,57 @@ class HomeView extends GetView<HomeController> {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(16, 4, 16, 0),
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
           child: Obx(
             () => TextField(
               key: const Key('search_field'),
               controller: controller.searchController,
               onChanged: (v) => controller.query.value = v,
               textInputAction: TextInputAction.search,
+              style: const TextStyle(fontSize: 14),
               decoration: InputDecoration(
+                isDense: true,
                 hintText: 'Cari karakter berdasarkan nama...',
-                prefixIcon: const Icon(Icons.search_rounded),
+                prefixIcon: const Icon(Icons.search_rounded, size: 20),
                 suffixIcon: controller.query.value.isEmpty
                     ? null
                     : IconButton(
                         onPressed: controller.clearSearch,
-                        icon: const Icon(Icons.close_rounded),
+                        icon: const Icon(Icons.close_rounded, size: 18),
                       ),
               ),
             ),
           ),
         ),
         SizedBox(
-          height: 60,
+          height: 52,
           child: Obx(
             () => ListView(
               scrollDirection: Axis.horizontal,
               padding: const EdgeInsets.symmetric(horizontal: 16),
               children: [
-                for (final entry in HomeController.filters.entries)
+                Center(
+                  child: _FilterChip(
+                    key: const Key('filter_all'),
+                    label: 'All',
+                    selected: controller.isAll,
+                    onTap: controller.clearStatuses,
+                  ),
+                ),
+                for (final entry in HomeController.statusFilters.entries)
                   Padding(
-                    padding: const EdgeInsets.only(right: 8),
+                    padding: const EdgeInsets.only(left: 8),
                     child: Center(
                       child: _FilterChip(
-                        key: Key('filter_${entry.key.toLowerCase()}'),
+                        key: Key('filter_${entry.value}'),
                         label: entry.key,
-                        value: entry.value,
-                        selected: controller.status.value == entry.value,
-                        onTap: () => controller.setStatus(entry.value),
+                        dotColor: AppColors.status(entry.value),
+                        selected: controller.selectedStatuses.contains(
+                          entry.value,
+                        ),
+                        // Chip aktif menampilkan × untuk melepas filter.
+                        removable: true,
+                        onTap: () => controller.toggleStatus(entry.value),
                       ),
                     ),
                   ),
@@ -92,13 +106,14 @@ class HomeView extends GetView<HomeController> {
         physics: const AlwaysScrollableScrollPhysics(),
         slivers: [
           SliverPadding(
-            padding: const EdgeInsets.fromLTRB(16, 4, 16, 0),
+            padding: const EdgeInsets.fromLTRB(16, 2, 16, 0),
             sliver: SliverGrid.builder(
               gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                maxCrossAxisExtent: 240,
-                mainAxisSpacing: 14,
-                crossAxisSpacing: 14,
-                childAspectRatio: 0.74,
+                maxCrossAxisExtent: 220,
+                mainAxisSpacing: 12,
+                crossAxisSpacing: 12,
+                // Tinggi kartu tetap, foto mengisi sisa ruang.
+                mainAxisExtent: 172,
               ),
               itemCount: controller.characters.length,
               itemBuilder: (_, index) {
@@ -111,10 +126,12 @@ class HomeView extends GetView<HomeController> {
             ),
           ),
           SliverToBoxAdapter(
-            child: showFooter ? const LoadMoreIndicator() : const SizedBox.shrink(),
+            child: showFooter
+                ? const LoadMoreIndicator()
+                : const SizedBox.shrink(),
           ),
           // Ruang agar kartu terakhir tidak tertutup navbar melayang.
-          const SliverToBoxAdapter(child: SizedBox(height: 110)),
+          const SliverToBoxAdapter(child: SizedBox(height: 100)),
         ],
       ),
     );
@@ -125,15 +142,17 @@ class _FilterChip extends StatelessWidget {
   const _FilterChip({
     super.key,
     required this.label,
-    required this.value,
     required this.selected,
     required this.onTap,
+    this.dotColor,
+    this.removable = false,
   });
 
   final String label;
-  final String value;
   final bool selected;
   final VoidCallback onTap;
+  final Color? dotColor;
+  final bool removable;
 
   @override
   Widget build(BuildContext context) {
@@ -153,10 +172,10 @@ class _FilterChip extends StatelessWidget {
           boxShadow: [
             BoxShadow(
               color: selected
-                  ? AppColors.pink.withValues(alpha: 0.3)
+                  ? AppColors.pink.withValues(alpha: 0.28)
                   : AppColors.shadow,
-              blurRadius: selected ? 14 : 10,
-              offset: const Offset(0, 4),
+              blurRadius: selected ? 12 : 8,
+              offset: const Offset(0, 3),
             ),
           ],
         ),
@@ -166,29 +185,50 @@ class _FilterChip extends StatelessWidget {
             onTap: onTap,
             borderRadius: borderRadius,
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 9),
+              padding: EdgeInsets.fromLTRB(
+                14,
+                7,
+                selected && removable ? 8 : 14,
+                7,
+              ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  if (value.isNotEmpty) ...[
+                  if (dotColor != null) ...[
                     Container(
-                      width: 8,
-                      height: 8,
+                      width: 7,
+                      height: 7,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: selected ? Colors.white : AppColors.status(value),
+                        color: selected ? Colors.white : dotColor,
                       ),
                     ),
-                    const SizedBox(width: 7),
+                    const SizedBox(width: 6),
                   ],
                   Text(
                     label,
                     style: TextStyle(
                       fontWeight: FontWeight.w700,
-                      fontSize: 13.5,
+                      fontSize: 12.5,
                       color: selected ? Colors.white : AppColors.text,
                     ),
                   ),
+                  if (selected && removable) ...[
+                    const SizedBox(width: 6),
+                    Container(
+                      width: 16,
+                      height: 16,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.white.withValues(alpha: 0.3),
+                      ),
+                      child: const Icon(
+                        Icons.close_rounded,
+                        size: 12,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
                 ],
               ),
             ),

@@ -30,7 +30,8 @@ class Character {
 
   factory Character.fromJson(Map<String, dynamic> json) {
     String nested(dynamic value) {
-      if (value is Map && value['name'] != null) return value['name'].toString();
+      if (value is Map && value['name'] != null)
+        return value['name'].toString();
       return 'unknown';
     }
 
@@ -52,15 +53,15 @@ class Character {
   }
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'name': name,
-        'status': status,
-        'species': species,
-        'type': type,
-        'gender': gender,
-        'origin': {'name': origin},
-        'location': {'name': location},
-        'image': image,
-        'episode_count': episodeCount,
-      };
+    'id': id,
+    'name': name,
+    'status': status,
+    'species': species,
+    'type': type,
+    'gender': gender,
+    'origin': {'name': origin},
+    'location': {'name': location},
+    'image': image,
+    'episode_count': episodeCount,
+  };
 }

@@ -16,21 +16,24 @@ class FavoriteView extends GetView<FavoriteController> {
         return const MessageView(
           icon: Icons.favorite_rounded,
           title: 'Belum ada karakter favorit',
-          message:
-              'Tekan ikon hati pada karakter untuk menambahkannya ke daftar ini.',
+          message: 'Tekan ikon hati pada karakter untuk menambahkannya ke daftar ini.',
         );
       }
       return ListView.separated(
-        padding: const EdgeInsets.fromLTRB(16, 4, 16, 120),
+        padding: const EdgeInsets.fromLTRB(16, 4, 16, 100),
         itemCount: controller.favorites.length + 1,
-        separatorBuilder: (_, _) => const SizedBox(height: 12),
+        separatorBuilder: (_, _) => const SizedBox(height: 10),
         itemBuilder: (_, index) {
           if (index == 0) {
             return Padding(
               padding: const EdgeInsets.only(left: 4),
               child: Row(
                 children: [
-                  const Icon(Icons.swipe_left_rounded, size: 16, color: AppColors.textMuted),
+                  const Icon(
+                    Icons.swipe_left_rounded,
+                    size: 16,
+                    color: AppColors.textMuted,
+                  ),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
@@ -65,7 +68,10 @@ class FavoriteView extends GetView<FavoriteController> {
                 children: [
                   Text(
                     'Hapus',
-                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                   SizedBox(width: 8),
                   Icon(Icons.delete_rounded, color: Colors.white),

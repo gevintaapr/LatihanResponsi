@@ -176,7 +176,7 @@ void main() {
     await registerAndLogin(tester);
 
     // Home: daftar karakter dari API.
-    expect(find.text('Halo, gevin'), findsOneWidget);
+    expect(find.text('Halo, gevin 👋'), findsOneWidget);
     expect(find.text('Rick Sanchez'), findsOneWidget);
     expect(find.text('Adjudicator Rick'), findsOneWidget);
 
@@ -186,8 +186,36 @@ void main() {
     expect(api.requests.last.queryParameters['status'], 'dead');
     expect(find.text('Adjudicator Rick'), findsOneWidget);
     expect(find.text('Rick Sanchez'), findsNothing);
+    // Filter ganda: Alive + Dead -> dua request, hasil digabung.
+    api.requests.clear();
+    await tester.tap(find.byKey(const Key('filter_alive')));
+    await _settle(tester);
+    expect(find.text('Rick Sanchez'), findsOneWidget);
+    expect(find.text('Adjudicator Rick'), findsOneWidget);
+    final statuses = api.requests.map((u) => u.queryParameters['status']).toSet();
+    expect(statuses, containsAll(['alive', 'dead']));
+
+    // Tap chip aktif (ikon ×) melepas filter Dead.
+    await tester.tap(find.byKey(const Key('filter_dead')));
+    await _settle(tester);
+    expect(find.text('Adjudicator Rick'), findsNothing);
+    expect(find.text('Rick Sanchez'), findsOneWidget);
+
+    // Memilih ketiga status = otomatis kembali ke All (tanpa parameter status).
+    await tester.tap(find.byKey(const Key('filter_dead')));
+    await _settle(tester);
+    await tester.tap(find.byKey(const Key('filter_unknown')));
+    await _settle(tester);
+    expect(api.requests.last.queryParameters.containsKey('status'), isFalse);
+    expect(find.text('Rick Sanchez'), findsOneWidget);
+    expect(find.text('Adjudicator Rick'), findsOneWidget);
+
+    // Tombol All mengosongkan filter.
+    await tester.tap(find.byKey(const Key('filter_dead')));
+    await _settle(tester);
     await tester.tap(find.byKey(const Key('filter_all')));
     await _settle(tester);
+    expect(api.requests.last.queryParameters.containsKey('status'), isFalse);
 
     // Pencarian nama (bonus), termasuk hasil kosong (404 dari API).
     await tester.enterText(find.byKey(const Key('search_field')), 'morty');
@@ -274,7 +302,7 @@ void main() {
       'favorites_gevin': [jsonEncode(_all[1]..remove('episode'))],
     });
     await startApp(tester);
-    expect(find.text('Halo, gevin'), findsOneWidget);
+    expect(find.text('Halo, gevin 👋'), findsOneWidget);
     await tester.tap(find.text('Favorites'));
     await _settle(tester);
     expect(favoriteCards, findsOneWidget);

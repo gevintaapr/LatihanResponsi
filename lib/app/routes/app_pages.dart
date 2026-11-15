@@ -15,7 +15,8 @@ import 'app_routes.dart';
 /// Halaman utama hanya bisa dibuka setelah login.
 class AuthGuard extends GetMiddleware {
   @override
-  RouteSettings? redirect(String? route) => Get.find<SessionService>().isLoggedIn
+  RouteSettings? redirect(String? route) =>
+      Get.find<SessionService>().isLoggedIn
       ? null
       : const RouteSettings(name: Routes.login);
 }
@@ -23,7 +24,8 @@ class AuthGuard extends GetMiddleware {
 /// Pengguna yang sudah login tidak perlu melihat halaman login lagi.
 class GuestGuard extends GetMiddleware {
   @override
-  RouteSettings? redirect(String? route) => Get.find<SessionService>().isLoggedIn
+  RouteSettings? redirect(String? route) =>
+      Get.find<SessionService>().isLoggedIn
       ? const RouteSettings(name: Routes.main)
       : null;
 }

@@ -38,22 +38,22 @@ class EpisodeView extends GetView<EpisodeController> {
         child: ListView.separated(
           controller: controller.scrollController,
           physics: const AlwaysScrollableScrollPhysics(),
-          padding: const EdgeInsets.fromLTRB(16, 4, 16, 120),
+          padding: const EdgeInsets.fromLTRB(16, 4, 16, 100),
           itemCount: controller.episodes.length + (showFooter ? 1 : 0),
-          separatorBuilder: (_, _) => const SizedBox(height: 12),
+          separatorBuilder: (_, _) => const SizedBox(height: 10),
           itemBuilder: (_, index) {
             if (index >= controller.episodes.length) {
               return const LoadMoreIndicator();
             }
             final episode = controller.episodes[index];
             return GlassContainer(
-              radius: AppRadius.md,
-              padding: const EdgeInsets.all(12),
+              radius: AppRadius.md - 2,
+              padding: const EdgeInsets.all(10),
               child: Row(
                 children: [
                   Container(
-                    width: 72,
-                    height: 56,
+                    width: 62,
+                    height: 44,
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                       gradient: AppGradients.warm,
@@ -71,7 +71,7 @@ class EpisodeView extends GetView<EpisodeController> {
                       style: const TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.w800,
-                        fontSize: 13,
+                        fontSize: 11.5,
                       ),
                     ),
                   ),
@@ -82,19 +82,25 @@ class EpisodeView extends GetView<EpisodeController> {
                       children: [
                         Text(
                           episode.name,
-                          style: const TextStyle(fontSize: 15.5, fontWeight: FontWeight.w700),
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
-                        const SizedBox(height: 6),
+                        const SizedBox(height: 4),
                         Row(
                           children: [
-                            const Icon(Icons.calendar_month_rounded,
-                                size: 14, color: AppColors.purple),
+                            const Icon(
+                              Icons.calendar_month_rounded,
+                              size: 14,
+                              color: AppColors.purple,
+                            ),
                             const SizedBox(width: 6),
                             Text(
                               episode.airDate,
                               style: const TextStyle(
                                 color: AppColors.textMuted,
-                                fontSize: 13,
+                                fontSize: 12,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),

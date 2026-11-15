@@ -27,16 +27,19 @@ class MessageView extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(28, 16, 28, 120),
         child: GlassContainer(
           radius: AppRadius.lg,
-          padding: const EdgeInsets.fromLTRB(24, 32, 24, 28),
+          padding: const EdgeInsets.fromLTRB(22, 26, 22, 22),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              GradientIcon(icon: icon, size: 72, gradient: gradient),
-              const SizedBox(height: 20),
+              GradientIcon(icon: icon, size: 58, gradient: gradient),
+              const SizedBox(height: 16),
               Text(
                 title,
                 textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w800,
+                ),
               ),
               const SizedBox(height: 8),
               Text(

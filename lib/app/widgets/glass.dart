@@ -18,9 +18,21 @@ class AppBackground extends StatelessWidget {
       decoration: const BoxDecoration(gradient: AppGradients.background),
       child: Stack(
         children: [
-          const _Blob(alignment: Alignment(-1.3, -0.95), color: AppColors.purple, size: 340),
-          const _Blob(alignment: Alignment(1.4, -0.2), color: AppColors.pink, size: 320),
-          const _Blob(alignment: Alignment(-1.2, 1.1), color: AppColors.yellow, size: 300),
+          const _Blob(
+            alignment: Alignment(-1.3, -0.95),
+            color: AppColors.purple,
+            size: 340,
+          ),
+          const _Blob(
+            alignment: Alignment(1.4, -0.2),
+            color: AppColors.pink,
+            size: 320,
+          ),
+          const _Blob(
+            alignment: Alignment(-1.2, 1.1),
+            color: AppColors.yellow,
+            size: 300,
+          ),
           Positioned.fill(child: child),
         ],
       ),
@@ -29,7 +41,11 @@ class AppBackground extends StatelessWidget {
 }
 
 class _Blob extends StatelessWidget {
-  const _Blob({required this.alignment, required this.color, required this.size});
+  const _Blob({
+    required this.alignment,
+    required this.color,
+    required this.size,
+  });
 
   final Alignment alignment;
   final Color color;
@@ -46,7 +62,10 @@ class _Blob extends StatelessWidget {
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             gradient: RadialGradient(
-              colors: [color.withValues(alpha: 0.38), color.withValues(alpha: 0)],
+              colors: [
+                color.withValues(alpha: 0.38),
+                color.withValues(alpha: 0),
+              ],
             ),
           ),
         ),
@@ -156,7 +175,11 @@ class GlassContainer extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: borderRadius,
         boxShadow: const [
-          BoxShadow(color: AppColors.shadow, blurRadius: 24, offset: Offset(0, 10)),
+          BoxShadow(
+            color: AppColors.shadow,
+            blurRadius: 24,
+            offset: Offset(0, 10),
+          ),
         ],
       ),
       child: ClipRRect(borderRadius: borderRadius, child: content),
@@ -171,7 +194,7 @@ class GlassIconButton extends StatelessWidget {
     required this.icon,
     required this.onPressed,
     this.tooltip,
-    this.size = 44,
+    this.size = 40,
     this.iconColor = AppColors.text,
   });
 
@@ -189,7 +212,9 @@ class GlassIconButton extends StatelessWidget {
       child: GlassContainer(
         radius: size / 2,
         onTap: onPressed,
-        child: Center(child: Icon(icon, color: iconColor, size: size * 0.48)),
+        child: Center(
+          child: Icon(icon, color: iconColor, size: size * 0.48),
+        ),
       ),
     );
     return tooltip == null ? button : Tooltip(message: tooltip!, child: button);
@@ -238,11 +263,11 @@ class GradientButton extends StatelessWidget {
           foregroundColor: Colors.white,
           disabledForegroundColor: Colors.white,
           shadowColor: Colors.transparent,
-          minimumSize: const Size.fromHeight(54),
+          minimumSize: const Size.fromHeight(48),
           shape: RoundedRectangleBorder(borderRadius: borderRadius),
           textStyle: const TextStyle(
             fontFamily: AppTheme.fontFamily,
-            fontSize: 16,
+            fontSize: 15,
             fontWeight: FontWeight.w700,
           ),
         ),
@@ -250,12 +275,18 @@ class GradientButton extends StatelessWidget {
             ? const SizedBox(
                 width: 22,
                 height: 22,
-                child: CircularProgressIndicator(strokeWidth: 2.5, color: Colors.white),
+                child: CircularProgressIndicator(
+                  strokeWidth: 2.5,
+                  color: Colors.white,
+                ),
               )
             : Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  if (icon != null) ...[Icon(icon, size: 20), const SizedBox(width: 8)],
+                  if (icon != null) ...[
+                    Icon(icon, size: 20),
+                    const SizedBox(width: 8),
+                  ],
                   Text(label),
                 ],
               ),
@@ -324,11 +355,11 @@ class GlassDialog extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            GradientIcon(icon: icon, size: 60),
-            const SizedBox(height: 18),
+            GradientIcon(icon: icon, size: 52),
+            const SizedBox(height: 16),
             Text(
               title,
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
             ),
             const SizedBox(height: 8),
             Text(

@@ -75,9 +75,9 @@ class ApiProvider {
     String path, [
     Map<String, String>? query,
   ]) async {
-    final uri = Uri.parse('$baseUrl$path').replace(
-      queryParameters: (query == null || query.isEmpty) ? null : query,
-    );
+    final uri = Uri.parse(
+      '$baseUrl$path',
+    ).replace(queryParameters: (query == null || query.isEmpty) ? null : query);
     try {
       final response = await _client.get(uri).timeout(_timeout);
       if (response.statusCode == 404) return null;

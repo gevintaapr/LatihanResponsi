@@ -30,7 +30,7 @@ class MainView extends GetView<MainController> {
           OutlinedButton(
             onPressed: Get.back,
             style: OutlinedButton.styleFrom(
-              minimumSize: const Size.fromHeight(54),
+              minimumSize: const Size.fromHeight(48),
               foregroundColor: AppColors.text,
               side: const BorderSide(color: AppColors.glassBorder, width: 1.5),
               backgroundColor: Colors.white.withValues(alpha: 0.5),
@@ -63,17 +63,19 @@ class MainView extends GetView<MainController> {
       () => GlassScaffold(
         extendBody: true,
         appBar: AppBar(
-          toolbarHeight: 72,
+          // Header dibuat lebih tinggi agar judul dan sapaan lebih lega.
+          toolbarHeight: 92,
           titleSpacing: 20,
           title: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: [
               Text(_titles[controller.tabIndex.value]),
-              const SizedBox(height: 2),
+              const SizedBox(height: 6),
               Text(
-                'Halo, ${session.currentUser.value ?? '-'}',
+                'Halo, ${session.currentUser.value ?? '-'} 👋',
                 style: const TextStyle(
-                  fontSize: 13,
+                  fontSize: 14,
                   fontWeight: FontWeight.w500,
                   color: AppColors.textMuted,
                 ),
@@ -114,15 +116,15 @@ class _FloatingNavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final favorites = Get.find<FavoriteController>();
     return SafeArea(
-      minimum: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+      minimum: const EdgeInsets.fromLTRB(16, 0, 16, 12),
       child: Center(
         heightFactor: 1,
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 440),
           child: GlassContainer(
             blur: true,
-            radius: AppRadius.lg,
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+            radius: AppRadius.lg - 4,
+            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
             child: Row(
               children: [
                 _NavItem(
@@ -194,8 +196,8 @@ class _NavItem extends StatelessWidget {
                   offset: const Offset(6, -4),
                   child: AnimatedContainer(
                     duration: const Duration(milliseconds: 220),
-                    width: 48,
-                    height: 34,
+                    width: 44,
+                    height: 28,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(14),
                       gradient: selected ? AppGradients.primary : null,
@@ -211,16 +213,16 @@ class _NavItem extends StatelessWidget {
                     ),
                     child: Icon(
                       icon,
-                      size: 21,
+                      size: 18,
                       color: selected ? Colors.white : AppColors.textMuted,
                     ),
                   ),
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: 3),
                 Text(
                   label,
                   style: TextStyle(
-                    fontSize: 11.5,
+                    fontSize: 11,
                     fontWeight: selected ? FontWeight.w800 : FontWeight.w600,
                     color: selected ? AppColors.purple : AppColors.textMuted,
                   ),

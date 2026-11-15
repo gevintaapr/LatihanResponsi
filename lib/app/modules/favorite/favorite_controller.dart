@@ -34,7 +34,7 @@ class FavoriteController extends GetxController {
       showSnack(
         '${character.name} dihapus dari favorit',
         icon: Icons.heart_broken_outlined,
-        iconColor: AppColors.textMuted,
+        iconColor: AppColors.unknown,
       );
     } else {
       favorites.add(character);

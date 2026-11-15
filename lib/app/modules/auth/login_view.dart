@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 
 import '../../routes/app_routes.dart';
 import 'auth_controller.dart';
+import '../../widgets/glass.dart';
 import 'auth_widgets.dart';
 
 class LoginView extends StatefulWidget {
@@ -43,7 +44,7 @@ class _LoginViewState extends State<LoginView> {
   @override
   Widget build(BuildContext context) {
     return AuthScaffold(
-      title: 'Rick & Morty Explorer',
+      title: 'Rick & Morty\nExplorer',
       subtitle: 'Masuk untuk menjelajahi multiverse',
       child: Form(
         key: _formKey,
@@ -87,7 +88,7 @@ class _LoginViewState extends State<LoginView> {
             ),
             const SizedBox(height: 24),
             Obx(
-              () => SubmitButton(
+              () => GradientButton(
                 label: 'Login',
                 loading: _controller.isLoading.value,
                 onPressed: _submit,

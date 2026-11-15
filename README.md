@@ -22,7 +22,7 @@ Bisa dijalankan di Chrome (`flutter run -d chrome`) maupun di Android/iOS.
 | Favorite | Disimpan di Shared Preferences (per akun), hapus dengan swipe + Snackbar (bisa dibatalkan), pesan saat kosong |
 | Episode | List episode (nama, air_date, kode episode) |
 | Ketentuan tambahan | Bottom Navigation Bar, loading state, error handling + tombol Coba Lagi, favorit reaktif antar halaman, route guard |
-| Bonus | Pencarian karakter berdasarkan nama (debounce 500 ms), tema gelap yang konsisten |
+| Bonus | Pencarian karakter berdasarkan nama (debounce 500 ms), desain glassmorphism pink–ungu–kuning yang konsisten |
 
 ## Struktur
 
@@ -42,9 +42,9 @@ lib/
     │   ├── favorite/              # FavoriteController (sumber data favorit global)
     │   └── episode/
     ├── routes/                    # nama route, GetPage, AuthGuard middleware
-    ├── theme/
+    ├── theme/                     # warna, gradasi, radius, ThemeData
     ├── utils/                     # helper Snackbar
-    └── widgets/                   # widget yang dipakai ulang
+    └── widgets/                   # widget yang dipakai ulang (glass.dart = komponen kaca)
 ```
 
 ## Tes
@@ -54,3 +54,9 @@ flutter test
 ```
 
 `test/app_flow_test.dart` menjalankan alur lengkap aplikasi dengan API tiruan dan Hive sungguhan.
+
+## Desain
+
+Tema glassmorphism terang: latar gradasi lavender → pink → peach dengan blob warna lembut, kartu kaca putih transparan, aksen gradasi pink → ungu dan kuning → pink, font Plus Jakarta Sans (dibundel di `assets/fonts`, lisensi OFL).
+
+Blur sungguhan (`BackdropFilter`) hanya dipakai di elemen besar yang sedikit (navbar, dialog, panel login, panel info detail). Kartu di list/grid memakai kaca ringan tanpa blur agar scroll tetap lancar di Chrome.

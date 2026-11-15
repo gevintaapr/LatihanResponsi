@@ -5,28 +5,44 @@ import '../data/models/character.dart';
 import '../modules/favorite/favorite_controller.dart';
 import '../routes/app_routes.dart';
 import '../theme/app_theme.dart';
+import 'glass.dart';
 
-class CharacterAvatar extends StatelessWidget {
-  const CharacterAvatar({super.key, required this.url, this.size = 64});
+/// Foto karakter dengan placeholder saat memuat / gagal.
+class CharacterImage extends StatelessWidget {
+  const CharacterImage({
+    super.key,
+    required this.url,
+    this.radius = AppRadius.sm,
+    this.width,
+    this.height,
+  });
 
   final String url;
-  final double size;
+  final double radius;
+  final double? width;
+  final double? height;
 
   @override
   Widget build(BuildContext context) {
     Widget placeholder(IconData icon) => Container(
-          width: size,
-          height: size,
-          color: AppColors.surfaceHigh,
-          child: Icon(icon, color: AppColors.textMuted, size: size * 0.45),
+          width: width,
+          height: height,
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [Color(0xFFF3E8FF), Color(0xFFFCE7F3)],
+            ),
+          ),
+          child: Icon(icon, color: AppColors.purple.withValues(alpha: 0.5)),
         );
 
     return ClipRRect(
-      borderRadius: BorderRadius.circular(14),
+      borderRadius: BorderRadius.circular(radius),
       child: Image.network(
         url,
-        width: size,
-        height: size,
+        width: width,
+        height: height,
         fit: BoxFit.cover,
         loadingBuilder: (_, child, progress) =>
             progress == null ? child : placeholder(Icons.image_outlined),
@@ -50,9 +66,13 @@ class StatusLabel extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Container(
-          width: 9,
-          height: 9,
-          decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+          width: 8,
+          height: 8,
+          decoration: BoxDecoration(
+            color: color,
+            shape: BoxShape.circle,
+            boxShadow: [BoxShadow(color: color.withValues(alpha: 0.5), blurRadius: 6)],
+          ),
         ),
         const SizedBox(width: 6),
         Flexible(
@@ -60,7 +80,11 @@ class StatusLabel extends StatelessWidget {
             suffix == null ? label : '$label · $suffix',
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: const TextStyle(color: AppColors.textMuted, fontSize: 13),
+            style: const TextStyle(
+              color: AppColors.textMuted,
+              fontSize: 12.5,
+              fontWeight: FontWeight.w500,
+            ),
           ),
         ),
       ],
@@ -68,28 +92,42 @@ class StatusLabel extends StatelessWidget {
   }
 }
 
-/// Tombol hati yang ikonnya otomatis mengikuti status favorit.
+/// Tombol hati bulat berlatar kaca; ikonnya mengikuti status favorit.
 class FavoriteButton extends StatelessWidget {
-  const FavoriteButton({super.key, required this.character});
+  const FavoriteButton({super.key, required this.character, this.size = 38});
 
   final Character character;
+  final double size;
 
   @override
   Widget build(BuildContext context) {
     final favorites = Get.find<FavoriteController>();
     return Obx(() {
       final isFav = favorites.isFavorite(character.id);
-      return IconButton(
-        tooltip: isFav ? 'Hapus dari favorit' : 'Tambah ke favorit',
-        onPressed: () => favorites.toggle(character),
-        icon: AnimatedSwitcher(
-          duration: const Duration(milliseconds: 200),
-          transitionBuilder: (child, anim) =>
-              ScaleTransition(scale: anim, child: child),
-          child: Icon(
-            isFav ? Icons.favorite : Icons.favorite_border,
-            key: ValueKey(isFav),
-            color: isFav ? AppColors.favorite : AppColors.textMuted,
+      return Tooltip(
+        message: isFav ? 'Hapus dari favorit' : 'Tambah ke favorit',
+        child: Material(
+          color: Colors.white.withValues(alpha: 0.85),
+          shape: const CircleBorder(),
+          elevation: 0,
+          child: InkWell(
+            customBorder: const CircleBorder(),
+            onTap: () => favorites.toggle(character),
+            child: SizedBox(
+              width: size,
+              height: size,
+              child: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 220),
+                transitionBuilder: (child, anim) =>
+                    ScaleTransition(scale: anim, child: child),
+                child: Icon(
+                  isFav ? Icons.favorite_rounded : Icons.favorite_border_rounded,
+                  key: ValueKey(isFav),
+                  size: size * 0.52,
+                  color: isFav ? AppColors.favorite : AppColors.textMuted,
+                ),
+              ),
+            ),
           ),
         ),
       );
@@ -97,7 +135,58 @@ class FavoriteButton extends StatelessWidget {
   }
 }
 
-/// Kartu karakter yang dipakai di Home dan Favorite Screen.
+/// Kartu karakter untuk grid 2 kolom di Home.
+class CharacterGridCard extends StatelessWidget {
+  const CharacterGridCard({super.key, required this.character});
+
+  final Character character;
+
+  @override
+  Widget build(BuildContext context) {
+    return GlassContainer(
+      radius: AppRadius.md + 2,
+      padding: const EdgeInsets.all(8),
+      onTap: () => Get.toNamed(Routes.detail, arguments: character),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: Stack(
+              children: [
+                Positioned.fill(
+                  child: CharacterImage(url: character.image, radius: AppRadius.md - 4),
+                ),
+                Positioned(
+                  top: 6,
+                  right: 6,
+                  child: FavoriteButton(character: character, size: 34),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(6, 10, 6, 4),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  character.name,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(fontSize: 14.5, fontWeight: FontWeight.w700),
+                ),
+                const SizedBox(height: 4),
+                StatusLabel(status: character.status, suffix: character.species),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Kartu karakter horizontal untuk Favorite Screen (cocok untuk swipe).
 class CharacterTile extends StatelessWidget {
   const CharacterTile({super.key, required this.character});
 
@@ -105,41 +194,32 @@ class CharacterTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: () => Get.toNamed(Routes.detail, arguments: character),
-        child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: Row(
-            children: [
-              CharacterAvatar(url: character.image),
-              const SizedBox(width: 14),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      character.name,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    StatusLabel(
-                      status: character.status,
-                      suffix: character.species,
-                    ),
-                  ],
+    return GlassContainer(
+      radius: AppRadius.md,
+      padding: const EdgeInsets.all(10),
+      onTap: () => Get.toNamed(Routes.detail, arguments: character),
+      child: Row(
+        children: [
+          CharacterImage(url: character.image, width: 64, height: 64),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  character.name,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
                 ),
-              ),
-              FavoriteButton(character: character),
-            ],
+                const SizedBox(height: 6),
+                StatusLabel(status: character.status, suffix: character.species),
+              ],
+            ),
           ),
-        ),
+          FavoriteButton(character: character),
+          const SizedBox(width: 4),
+        ],
       ),
     );
   }

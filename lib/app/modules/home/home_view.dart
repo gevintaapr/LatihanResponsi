@@ -23,19 +23,19 @@ class HomeView extends GetView<HomeController> {
               textInputAction: TextInputAction.search,
               decoration: InputDecoration(
                 hintText: 'Cari karakter berdasarkan nama...',
-                prefixIcon: const Icon(Icons.search),
+                prefixIcon: const Icon(Icons.search_rounded),
                 suffixIcon: controller.query.value.isEmpty
                     ? null
                     : IconButton(
                         onPressed: controller.clearSearch,
-                        icon: const Icon(Icons.close),
+                        icon: const Icon(Icons.close_rounded),
                       ),
               ),
             ),
           ),
         ),
         SizedBox(
-          height: 56,
+          height: 60,
           child: Obx(
             () => ListView(
               scrollDirection: Axis.horizontal,
@@ -46,10 +46,11 @@ class HomeView extends GetView<HomeController> {
                     padding: const EdgeInsets.only(right: 8),
                     child: Center(
                       child: _FilterChip(
+                        key: Key('filter_${entry.key.toLowerCase()}'),
                         label: entry.key,
                         value: entry.value,
                         selected: controller.status.value == entry.value,
-                        onSelected: () => controller.setStatus(entry.value),
+                        onTap: () => controller.setStatus(entry.value),
                       ),
                     ),
                   ),
@@ -70,7 +71,6 @@ class HomeView extends GetView<HomeController> {
     if (error != null) {
       return MessageView(
         icon: Icons.wifi_off_rounded,
-        iconColor: AppColors.dead,
         title: 'Gagal memuat data',
         message: error,
         onRetry: controller.fetch,
@@ -79,6 +79,7 @@ class HomeView extends GetView<HomeController> {
     if (controller.characters.isEmpty) {
       return const MessageView(
         icon: Icons.search_off_rounded,
+        gradient: AppGradients.warm,
         title: 'Karakter tidak ditemukan',
         message: 'Coba kata kunci atau filter status yang lain.',
       );
@@ -86,22 +87,35 @@ class HomeView extends GetView<HomeController> {
     final showFooter = controller.isLoadingMore.value;
     return RefreshIndicator(
       onRefresh: controller.fetch,
-      child: ListView.separated(
+      child: CustomScrollView(
         controller: controller.scrollController,
         physics: const AlwaysScrollableScrollPhysics(),
-        padding: const EdgeInsets.fromLTRB(16, 4, 16, 16),
-        itemCount: controller.characters.length + (showFooter ? 1 : 0),
-        separatorBuilder: (_, _) => const SizedBox(height: 10),
-        itemBuilder: (_, index) {
-          if (index >= controller.characters.length) {
-            return const LoadMoreIndicator();
-          }
-          final character = controller.characters[index];
-          return CharacterTile(
-            key: ValueKey(character.id),
-            character: character,
-          );
-        },
+        slivers: [
+          SliverPadding(
+            padding: const EdgeInsets.fromLTRB(16, 4, 16, 0),
+            sliver: SliverGrid.builder(
+              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                maxCrossAxisExtent: 240,
+                mainAxisSpacing: 14,
+                crossAxisSpacing: 14,
+                childAspectRatio: 0.74,
+              ),
+              itemCount: controller.characters.length,
+              itemBuilder: (_, index) {
+                final character = controller.characters[index];
+                return CharacterGridCard(
+                  key: ValueKey(character.id),
+                  character: character,
+                );
+              },
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: showFooter ? const LoadMoreIndicator() : const SizedBox.shrink(),
+          ),
+          // Ruang agar kartu terakhir tidak tertutup navbar melayang.
+          const SliverToBoxAdapter(child: SizedBox(height: 110)),
+        ],
       ),
     );
   }
@@ -109,35 +123,78 @@ class HomeView extends GetView<HomeController> {
 
 class _FilterChip extends StatelessWidget {
   const _FilterChip({
+    super.key,
     required this.label,
     required this.value,
     required this.selected,
-    required this.onSelected,
+    required this.onTap,
   });
 
   final String label;
   final String value;
   final bool selected;
-  final VoidCallback onSelected;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    return ChoiceChip(
-      label: Text(label),
+    final borderRadius = BorderRadius.circular(999);
+    return Semantics(
+      button: true,
       selected: selected,
-      showCheckmark: false,
-      onSelected: (_) => onSelected(),
-      labelStyle: TextStyle(
-        fontWeight: FontWeight.w600,
-        color: selected ? AppColors.background : Colors.white,
-      ),
-      avatar: value.isEmpty
-          ? null
-          : CircleAvatar(
-              radius: 5,
-              backgroundColor:
-                  selected ? AppColors.background : AppColors.status(value),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        decoration: BoxDecoration(
+          borderRadius: borderRadius,
+          gradient: selected ? AppGradients.primary : null,
+          color: selected ? null : AppColors.glassStrong,
+          border: Border.all(
+            color: selected ? Colors.transparent : AppColors.glassBorder,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: selected
+                  ? AppColors.pink.withValues(alpha: 0.3)
+                  : AppColors.shadow,
+              blurRadius: selected ? 14 : 10,
+              offset: const Offset(0, 4),
             ),
+          ],
+        ),
+        child: Material(
+          type: MaterialType.transparency,
+          child: InkWell(
+            onTap: onTap,
+            borderRadius: borderRadius,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 9),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (value.isNotEmpty) ...[
+                    Container(
+                      width: 8,
+                      height: 8,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: selected ? Colors.white : AppColors.status(value),
+                      ),
+                    ),
+                    const SizedBox(width: 7),
+                  ],
+                  Text(
+                    label,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 13.5,
+                      color: selected ? Colors.white : AppColors.text,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

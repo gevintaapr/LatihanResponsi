@@ -35,7 +35,7 @@ class MainApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'Rick & Morty Explorer',
       debugShowCheckedModeBanner: false,
-      theme: AppTheme.dark,
+      theme: AppTheme.light,
       scaffoldMessengerKey: scaffoldMessengerKey,
       initialRoute: AppPages.initial,
       getPages: AppPages.pages,

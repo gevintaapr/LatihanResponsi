@@ -8,7 +8,7 @@ final scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
 void showSnack(
   String message, {
   IconData icon = Icons.info_outline,
-  Color iconColor = AppColors.primary,
+  Color iconColor = AppColors.yellow,
   String? actionLabel,
   VoidCallback? onAction,
 }) {

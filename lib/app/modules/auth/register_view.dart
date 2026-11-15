@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'auth_controller.dart';
+import '../../widgets/glass.dart';
 import 'auth_widgets.dart';
 
 class RegisterView extends StatefulWidget {
@@ -94,7 +95,7 @@ class _RegisterViewState extends State<RegisterView> {
             ),
             const SizedBox(height: 24),
             Obx(
-              () => SubmitButton(
+              () => GradientButton(
                 label: 'Register',
                 loading: _controller.isLoading.value,
                 onPressed: _submit,

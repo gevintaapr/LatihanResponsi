@@ -1,17 +1,34 @@
 import 'package:flutter/material.dart';
 
+/// Palet warna tema glassmorphism (pink, ungu, kuning di atas latar pastel).
 class AppColors {
-  static const background = Color(0xFF0B1220);
-  static const surface = Color(0xFF151E2E);
-  static const surfaceHigh = Color(0xFF1E293B);
-  static const primary = Color(0xFF97CE4C); // hijau portal
-  static const secondary = Color(0xFF00B5CC);
-  static const favorite = Color(0xFFFF4D6D);
-  static const textMuted = Color(0xFF94A3B8);
+  // Latar
+  static const bgTop = Color(0xFFEDE4FF); // lavender
+  static const bgMiddle = Color(0xFFFCE4F1); // pink muda
+  static const bgBottom = Color(0xFFFFEBDC); // peach
 
-  static const alive = Color(0xFF55CC44);
-  static const dead = Color(0xFFE5484D);
-  static const unknown = Color(0xFF9E9E9E);
+  // Warna utama
+  static const purple = Color(0xFF8B5CF6);
+  static const pink = Color(0xFFEC4899);
+  static const yellow = Color(0xFFFBBF24);
+  static const peach = Color(0xFFFB923C);
+
+  // Teks
+  static const text = Color(0xFF2D1B4E); // ungu tua
+  static const textMuted = Color(0xFF7C6F99);
+
+  // Kaca
+  static const glass = Color(0x8CFFFFFF); // putih 55%
+  static const glassStrong = Color(0xBFFFFFFF); // putih 75%
+  static const glassBorder = Color(0xB3FFFFFF); // putih 70%
+  static const shadow = Color(0x1A6D28D9); // bayangan ungu tipis
+
+  // Status (versi pastel agar serasi, tapi artinya tetap mudah dibaca)
+  static const alive = Color(0xFF22B07D);
+  static const dead = Color(0xFFF0506E);
+  static const unknown = Color(0xFF9A93AD);
+
+  static const favorite = Color(0xFFFF4D8D);
 
   static Color status(String status) {
     switch (status.toLowerCase()) {
@@ -25,105 +42,144 @@ class AppColors {
   }
 }
 
+/// Gradasi yang dipakai berulang di seluruh aplikasi.
+class AppGradients {
+  /// Gradasi utama: tombol, chip aktif, ikon navbar aktif.
+  static const primary = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [AppColors.pink, AppColors.purple],
+  );
+
+  /// Gradasi aksen hangat: badge episode, sorotan kecil.
+  static const warm = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [AppColors.yellow, AppColors.pink],
+  );
+
+  static const background = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [AppColors.bgTop, AppColors.bgMiddle, AppColors.bgBottom],
+    stops: [0, 0.55, 1],
+  );
+}
+
+/// Ukuran sudut yang konsisten.
+class AppRadius {
+  static const sm = 14.0;
+  static const md = 20.0;
+  static const lg = 28.0;
+}
+
 class AppTheme {
-  static ThemeData get dark {
+  static const fontFamily = 'PlusJakartaSans';
+
+  static ThemeData get light {
     final scheme = ColorScheme.fromSeed(
-      seedColor: AppColors.primary,
-      brightness: Brightness.dark,
+      seedColor: AppColors.purple,
+      brightness: Brightness.light,
     ).copyWith(
-      primary: AppColors.primary,
-      onPrimary: const Color(0xFF0B1220),
-      secondary: AppColors.secondary,
-      surface: AppColors.surface,
+      primary: AppColors.purple,
+      onPrimary: Colors.white,
+      secondary: AppColors.pink,
+      tertiary: AppColors.yellow,
+      surface: Colors.white,
+      onSurface: AppColors.text,
       error: AppColors.dead,
     );
-    final radius = BorderRadius.circular(14);
-
-    return ThemeData(
+    final radius = BorderRadius.circular(AppRadius.sm + 2);
+    final base = ThemeData(
       useMaterial3: true,
+      fontFamily: fontFamily,
       colorScheme: scheme,
-      scaffoldBackgroundColor: AppColors.background,
+    );
+
+    return base.copyWith(
+      scaffoldBackgroundColor: AppColors.bgMiddle,
+      textTheme: base.textTheme.apply(
+        bodyColor: AppColors.text,
+        displayColor: AppColors.text,
+      ),
+      iconTheme: const IconThemeData(color: AppColors.text),
       appBarTheme: const AppBarTheme(
-        backgroundColor: AppColors.background,
+        backgroundColor: Colors.transparent,
         surfaceTintColor: Colors.transparent,
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        foregroundColor: AppColors.text,
         centerTitle: false,
         titleTextStyle: TextStyle(
-          fontSize: 22,
+          fontFamily: fontFamily,
+          fontSize: 24,
           fontWeight: FontWeight.w800,
-          color: Colors.white,
+          color: AppColors.text,
         ),
-      ),
-      cardTheme: CardThemeData(
-        color: AppColors.surface,
-        elevation: 0,
-        margin: EdgeInsets.zero,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: AppColors.surface,
+        fillColor: AppColors.glassStrong,
         hintStyle: const TextStyle(color: AppColors.textMuted),
         prefixIconColor: AppColors.textMuted,
         suffixIconColor: AppColors.textMuted,
         contentPadding:
-            const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
         border: OutlineInputBorder(
           borderRadius: radius,
-          borderSide: BorderSide.none,
+          borderSide: const BorderSide(color: AppColors.glassBorder),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: radius,
-          borderSide: BorderSide.none,
+          borderSide: const BorderSide(color: AppColors.glassBorder),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: radius,
-          borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
+          borderSide: const BorderSide(color: AppColors.purple, width: 1.5),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: radius,
+          borderSide: const BorderSide(color: AppColors.dead),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: radius,
+          borderSide: const BorderSide(color: AppColors.dead, width: 1.5),
         ),
       ),
-      filledButtonTheme: FilledButtonThemeData(
-        style: FilledButton.styleFrom(
-          minimumSize: const Size.fromHeight(52),
-          shape: RoundedRectangleBorder(borderRadius: radius),
-          textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
-        ),
-      ),
-      chipTheme: ChipThemeData(
-        backgroundColor: AppColors.surface,
-        selectedColor: AppColors.primary,
-        checkmarkColor: AppColors.background,
-        side: BorderSide.none,
-        shape: const StadiumBorder(),
-        labelStyle: const TextStyle(fontWeight: FontWeight.w600),
-      ),
-      navigationBarTheme: NavigationBarThemeData(
-        backgroundColor: AppColors.surface,
-        surfaceTintColor: Colors.transparent,
-        indicatorColor: AppColors.primary.withValues(alpha: 0.18),
-        labelTextStyle: WidgetStateProperty.resolveWith(
-          (states) => TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w600,
-            color: states.contains(WidgetState.selected)
-                ? AppColors.primary
-                : AppColors.textMuted,
+      textButtonTheme: TextButtonThemeData(
+        style: TextButton.styleFrom(
+          foregroundColor: AppColors.purple,
+          textStyle: const TextStyle(
+            fontFamily: fontFamily,
+            fontWeight: FontWeight.w700,
           ),
         ),
-        iconTheme: WidgetStateProperty.resolveWith(
-          (states) => IconThemeData(
-            color: states.contains(WidgetState.selected)
-                ? AppColors.primary
-                : AppColors.textMuted,
-          ),
-        ),
+      ),
+      progressIndicatorTheme: const ProgressIndicatorThemeData(
+        color: AppColors.purple,
+        linearTrackColor: Colors.transparent,
       ),
       snackBarTheme: SnackBarThemeData(
         behavior: SnackBarBehavior.floating,
-        backgroundColor: AppColors.surfaceHigh,
-        contentTextStyle: const TextStyle(color: Colors.white),
-        actionTextColor: AppColors.primary,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        backgroundColor: AppColors.text.withValues(alpha: 0.92),
+        contentTextStyle: const TextStyle(
+          fontFamily: fontFamily,
+          color: Colors.white,
+          fontWeight: FontWeight.w500,
+        ),
+        actionTextColor: AppColors.yellow,
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppRadius.sm + 2),
+        ),
       ),
-      dialogTheme: const DialogThemeData(backgroundColor: AppColors.surface),
+      dialogTheme: DialogThemeData(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppRadius.lg),
+        ),
+      ),
     );
   }
 }

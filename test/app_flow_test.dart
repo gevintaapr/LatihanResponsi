@@ -181,12 +181,12 @@ void main() {
     expect(find.text('Adjudicator Rick'), findsOneWidget);
 
     // Filter status -> endpoint /character?status=dead
-    await tester.tap(find.widgetWithText(ChoiceChip, 'Dead'));
+    await tester.tap(find.byKey(const Key('filter_dead')));
     await _settle(tester);
     expect(api.requests.last.queryParameters['status'], 'dead');
     expect(find.text('Adjudicator Rick'), findsOneWidget);
     expect(find.text('Rick Sanchez'), findsNothing);
-    await tester.tap(find.widgetWithText(ChoiceChip, 'All'));
+    await tester.tap(find.byKey(const Key('filter_all')));
     await _settle(tester);
 
     // Pencarian nama (bonus), termasuk hasil kosong (404 dari API).
@@ -205,7 +205,7 @@ void main() {
     await _settle(tester);
 
     // Favorit dari Home.
-    await tester.tap(find.byIcon(Icons.favorite_border).first);
+    await tester.tap(find.byIcon(Icons.favorite_border_rounded).first);
     await _settle(tester);
     expect(find.text('Rick Sanchez ditambahkan ke favorit'), findsOneWidget);
 
@@ -222,7 +222,7 @@ void main() {
     await _settle(tester);
     expect(find.text('Morty Smith ditambahkan ke favorit'), findsOneWidget);
     expect(find.text('Hapus dari Favorit'), findsOneWidget);
-    await tester.pageBack();
+    await tester.tap(find.byTooltip('Kembali'));
     await _settle(tester);
 
     // Favorite Screen langsung berisi 2 karakter.
@@ -248,7 +248,7 @@ void main() {
     expect(
       find.descendant(
         of: find.byType(IndexedStack),
-        matching: find.byIcon(Icons.favorite, skipOffstage: true),
+        matching: find.byIcon(Icons.favorite_rounded, skipOffstage: true),
       ),
       findsOneWidget,
     );

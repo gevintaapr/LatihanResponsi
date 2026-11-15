@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../theme/app_theme.dart';
+import '../../widgets/glass.dart';
 
 /// Kerangka bersama halaman Login dan Register supaya tampilannya konsisten.
 class AuthScaffold extends StatelessWidget {
@@ -19,8 +20,22 @@ class AuthScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: showBack ? AppBar() : null,
+    return GlassScaffold(
+      appBar: showBack
+          ? AppBar(
+              automaticallyImplyLeading: false,
+              leading: Padding(
+                padding: const EdgeInsets.only(left: 12),
+                child: Center(
+                  child: GlassIconButton(
+                    icon: Icons.arrow_back_rounded,
+                    tooltip: 'Kembali',
+                    onPressed: () => Navigator.of(context).maybePop(),
+                  ),
+                ),
+              ),
+            )
+          : null,
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -30,79 +45,34 @@ class AuthScaffold extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Center(
-                    child: Container(
-                      width: 84,
-                      height: 84,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        gradient: const RadialGradient(
-                          colors: [AppColors.primary, AppColors.secondary],
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: AppColors.primary.withValues(alpha: 0.4),
-                            blurRadius: 32,
-                          ),
-                        ],
-                      ),
-                      child: const Icon(
-                        Icons.blur_circular,
-                        size: 48,
-                        color: AppColors.background,
-                      ),
-                    ),
+                  const Center(
+                    child: GradientIcon(icon: Icons.blur_on_rounded, size: 84),
                   ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 22),
                   Text(
                     title,
                     textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontSize: 26,
-                      fontWeight: FontWeight.w800,
-                    ),
+                    style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w800, height: 1.15),
                   ),
-                  const SizedBox(height: 6),
+                  const SizedBox(height: 8),
                   Text(
                     subtitle,
                     textAlign: TextAlign.center,
                     style: const TextStyle(color: AppColors.textMuted),
                   ),
-                  const SizedBox(height: 32),
-                  child,
+                  const SizedBox(height: 28),
+                  GlassContainer(
+                    blur: true,
+                    radius: AppRadius.lg,
+                    padding: const EdgeInsets.all(20),
+                    child: child,
+                  ),
                 ],
               ),
             ),
           ),
         ),
       ),
-    );
-  }
-}
-
-class SubmitButton extends StatelessWidget {
-  const SubmitButton({
-    super.key,
-    required this.label,
-    required this.loading,
-    required this.onPressed,
-  });
-
-  final String label;
-  final bool loading;
-  final VoidCallback onPressed;
-
-  @override
-  Widget build(BuildContext context) {
-    return FilledButton(
-      onPressed: loading ? null : onPressed,
-      child: loading
-          ? const SizedBox(
-              width: 22,
-              height: 22,
-              child: CircularProgressIndicator(strokeWidth: 2.5),
-            )
-          : Text(label),
     );
   }
 }

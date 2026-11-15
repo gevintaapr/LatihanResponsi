@@ -71,66 +71,94 @@ class DetailView extends GetView<DetailController> {
                           borderRadius: BorderRadius.all(Radius.circular(4)),
                         ),
                       ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 22),
                     Text(
                       character.name,
+                      textAlign: TextAlign.center,
                       style: const TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.w800,
                         height: 1.15,
                       ),
                     ),
-                    const SizedBox(height: 10),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: _StatusPill(status: character.status),
+                    const SizedBox(height: 6),
+                    Text(
+                      '${character.species} · ${character.gender}',
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        color: AppColors.textMuted,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
+                    const SizedBox(height: 12),
+                    Center(child: _StatusPill(status: character.status)),
                     if (error != null) ...[
                       const SizedBox(height: 16),
                       _ErrorBanner(message: error, onRetry: controller.fetch),
                     ],
-                    const SizedBox(height: 20),
-                    GlassContainer(
-                      blur: true,
-                      radius: AppRadius.lg,
-                      padding: const EdgeInsets.symmetric(vertical: 6),
-                      child: Column(
-                        children: [
-                          _InfoRow(
+                    const SizedBox(height: 24),
+                    const _SectionTitle('Identitas'),
+                    const SizedBox(height: 12),
+                    // Info pendek: grid 2 kolom.
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _InfoTile(
                             icon: Icons.monitor_heart_rounded,
                             label: 'Status',
                             value: character.status.capitalizeFirst ?? '-',
+                            valueColor: AppColors.status(character.status),
                           ),
-                          _InfoRow(
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: _InfoTile(
                             icon: Icons.pets_rounded,
                             label: 'Spesies',
                             value: character.type.isEmpty
                                 ? character.species
                                 : '${character.species} (${character.type})',
+                            gradient: AppGradients.warm,
                           ),
-                          _InfoRow(
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _InfoTile(
                             icon: Icons.wc_rounded,
                             label: 'Gender',
                             value: character.gender,
+                            gradient: AppGradients.warm,
                           ),
-                          _InfoRow(
-                            icon: Icons.public_rounded,
-                            label: 'Origin',
-                            value: character.origin,
-                          ),
-                          _InfoRow(
-                            icon: Icons.location_on_rounded,
-                            label: 'Location',
-                            value: character.location,
-                          ),
-                          _InfoRow(
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: _InfoTile(
                             icon: Icons.movie_rounded,
-                            label: 'Jumlah episode',
-                            value: '${character.episodeCount}',
-                            isLast: true,
+                            label: 'Episode',
+                            value: '${character.episodeCount} episode',
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 24),
+                    const _SectionTitle('Asal & Lokasi'),
+                    const SizedBox(height: 12),
+                    // Info panjang: kartu selebar layar.
+                    _WideInfoTile(
+                      icon: Icons.public_rounded,
+                      label: 'Origin',
+                      value: character.origin,
+                    ),
+                    const SizedBox(height: 12),
+                    _WideInfoTile(
+                      icon: Icons.location_on_rounded,
+                      label: 'Location',
+                      value: character.location,
+                      gradient: AppGradients.warm,
                     ),
                   ],
                 ),
@@ -210,55 +238,129 @@ class _StatusPill extends StatelessWidget {
   }
 }
 
-class _InfoRow extends StatelessWidget {
-  const _InfoRow({
+class _SectionTitle extends StatelessWidget {
+  const _SectionTitle(this.text);
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Container(
+          width: 4,
+          height: 18,
+          decoration: BoxDecoration(
+            gradient: AppGradients.primary,
+            borderRadius: BorderRadius.circular(4),
+          ),
+        ),
+        const SizedBox(width: 10),
+        Text(
+          text,
+          style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w800),
+        ),
+      ],
+    );
+  }
+}
+
+/// Kartu info kecil untuk grid 2 kolom: ikon di atas, label, lalu nilai.
+class _InfoTile extends StatelessWidget {
+  const _InfoTile({
     required this.icon,
     required this.label,
     required this.value,
-    this.isLast = false,
+    this.gradient = AppGradients.primary,
+    this.valueColor,
   });
 
   final IconData icon;
   final String label;
   final String value;
-  final bool isLast;
+  final Gradient gradient;
+  final Color? valueColor;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          child: Row(
-            children: [
-              GradientIcon(icon: icon, size: 36),
-              const SizedBox(width: 14),
-              Text(
-                label,
-                style: const TextStyle(
-                  color: AppColors.textMuted,
-                  fontWeight: FontWeight.w500,
+    return GlassContainer(
+      radius: AppRadius.md,
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          GradientIcon(icon: icon, size: 40, gradient: gradient),
+          const SizedBox(height: 14),
+          Text(
+            label,
+            style: const TextStyle(
+              color: AppColors.textMuted,
+              fontSize: 12.5,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          const SizedBox(height: 2),
+          Text(
+            value,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w800,
+              color: valueColor ?? AppColors.text,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Kartu info selebar layar untuk nilai yang panjang (origin, location).
+class _WideInfoTile extends StatelessWidget {
+  const _WideInfoTile({
+    required this.icon,
+    required this.label,
+    required this.value,
+    this.gradient = AppGradients.primary,
+  });
+
+  final IconData icon;
+  final String label;
+  final String value;
+  final Gradient gradient;
+
+  @override
+  Widget build(BuildContext context) {
+    return GlassContainer(
+      radius: AppRadius.md,
+      padding: const EdgeInsets.all(14),
+      child: Row(
+        children: [
+          GradientIcon(icon: icon, size: 44, gradient: gradient),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  label,
+                  style: const TextStyle(
+                    color: AppColors.textMuted,
+                    fontSize: 12.5,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Text(
+                const SizedBox(height: 2),
+                Text(
                   value,
-                  textAlign: TextAlign.end,
-                  style: const TextStyle(fontWeight: FontWeight.w700),
+                  style: const TextStyle(fontSize: 15.5, fontWeight: FontWeight.w800),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-        if (!isLast)
-          Divider(
-            height: 1,
-            indent: 66,
-            endIndent: 16,
-            color: AppColors.purple.withValues(alpha: 0.08),
-          ),
-      ],
+        ],
+      ),
     );
   }
 }

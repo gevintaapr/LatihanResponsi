@@ -1,3 +1,13 @@
+// ====================================================================
+// FILE    : lib/app/modules/episode/episode_view.dart
+// LAPISAN : Tampilan / Halaman Episode
+//
+// GUNANYA :
+//   Menampilkan nama dan air_date setiap episode (soal 5).
+//
+// DIPAKAI OLEH: Tab ketiga di MainView.
+// ====================================================================
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

@@ -1,3 +1,14 @@
+// ====================================================================
+// FILE    : lib/app/modules/auth/auth_widgets.dart
+// LAPISAN : Tampilan / Kerangka halaman Login & Register
+//
+// GUNANYA :
+//   AuthScaffold: logo, judul, dan panel kaca berisi form. Dipakai bersama
+//   agar halaman Login dan Register tampil seragam.
+//
+// DIPAKAI OLEH: LoginView, RegisterView.
+// ====================================================================
+
 import 'package:flutter/material.dart';
 
 import '../../theme/app_theme.dart';

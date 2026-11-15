@@ -1,3 +1,17 @@
+// ====================================================================
+// FILE    : lib/app/routes/app_pages.dart
+// LAPISAN : Navigasi / Daftar halaman + proteksi login
+//
+// GUNANYA :
+//   Memasangkan setiap route dengan halamannya (page) dan controllernya
+//   (binding). Binding membuat controller otomatis saat halaman dibuka.
+//   AuthGuard  : halaman utama & detail hanya bisa dibuka jika sudah login
+//                (soal 6d). Jika belum, dialihkan ke /login.
+//   GuestGuard : yang sudah login tidak bisa kembali ke halaman login.
+//
+// DIPAKAI OLEH: main.dart (GetMaterialApp.getPages).
+// ====================================================================
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

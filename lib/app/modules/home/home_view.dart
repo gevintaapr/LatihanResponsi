@@ -1,3 +1,15 @@
+// ====================================================================
+// FILE    : lib/app/modules/home/home_view.dart
+// LAPISAN : Tampilan / Home Screen
+//
+// GUNANYA :
+//   Kolom pencarian, chip filter status, dan grid kartu karakter.
+//   Obx(...) membuat bagian UI menggambar ulang otomatis setiap kali
+//   variabel .obs di HomeController berubah.
+//
+// DIPAKAI OLEH: Tab pertama di MainView.
+// ====================================================================
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -19,6 +31,8 @@ class HomeView extends GetView<HomeController> {
             () => TextField(
               key: const Key('search_field'),
               controller: controller.searchController,
+              // Setiap ketikan mengubah query; controller menunggu 500 ms
+              // (debounce) sebelum memanggil API pencarian.
               onChanged: (v) => controller.query.value = v,
               textInputAction: TextInputAction.search,
               style: const TextStyle(fontSize: 14),
@@ -77,6 +91,7 @@ class HomeView extends GetView<HomeController> {
     );
   }
 
+  // Memilih tampilan sesuai state: loading -> error -> kosong -> grid data.
   Widget _buildBody() {
     if (controller.isLoading.value) {
       return const LoadingView(label: 'Memuat karakter...');

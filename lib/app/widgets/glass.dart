@@ -1,3 +1,16 @@
+// ====================================================================
+// FILE    : lib/app/widgets/glass.dart
+// LAPISAN : Tampilan / Komponen kaca (glassmorphism)
+//
+// GUNANYA :
+//   Kumpulan widget yang dipakai ulang di semua halaman:
+//     AppBackground / GlassScaffold : latar gradasi pastel
+//     GlassContainer               : kartu kaca (blur: true = blur sungguhan)
+//     GradientButton, GradientIcon, GlassIconButton, GlassDialog
+//
+// DIPAKAI OLEH: Semua halaman.
+// ====================================================================
+
 import 'dart:ui';
 
 import 'package:flutter/material.dart';

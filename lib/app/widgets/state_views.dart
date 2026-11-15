@@ -1,3 +1,15 @@
+// ====================================================================
+// FILE    : lib/app/widgets/state_views.dart
+// LAPISAN : Tampilan / Kondisi loading, error, kosong
+//
+// GUNANYA :
+//   LoadingView      : saat data sedang dimuat (loading state)
+//   MessageView      : saat error (dengan tombol Coba Lagi) atau data kosong
+//   LoadMoreIndicator: spinner kecil di bawah list saat memuat halaman berikut
+//
+// DIPAKAI OLEH: HomeView, DetailView, FavoriteView, EpisodeView.
+// ====================================================================
+
 import 'package:flutter/material.dart';
 
 import '../theme/app_theme.dart';

@@ -2,6 +2,10 @@
 
 Latihan responsi mobile — Flutter + Dart dengan GetX (state management, routing, dependency injection).
 
+## Panduan lengkap
+
+Penjelasan langkah demi langkah (dari `flutter create` sampai semua halaman) ada di [`docs/PANDUAN.md`](docs/PANDUAN.md).
+
 ## Menjalankan
 
 ```bash

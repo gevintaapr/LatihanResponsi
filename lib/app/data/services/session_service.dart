@@ -1,3 +1,17 @@
+// ====================================================================
+// FILE    : lib/app/data/services/session_service.dart
+// LAPISAN : Data / Shared Preferences
+//
+// GUNANYA :
+//   Menyimpan dua hal yang harus tetap ada walau aplikasi ditutup:
+//     1. Sesi login  -> key 'session_username'
+//     2. Favorit     -> key 'favorites_<username>' (list JSON karakter)
+//   currentUser adalah variabel reaktif (Rx): saat berubah, UI yang membacanya
+//   ikut diperbarui otomatis.
+//
+// DIPAKAI OLEH: AuthController, FavoriteController, AuthGuard, MainView.
+// ====================================================================
+
 import 'dart:convert';
 
 import 'package:get/get.dart';

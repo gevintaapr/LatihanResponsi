@@ -1,3 +1,14 @@
+// ====================================================================
+// FILE    : lib/app/modules/favorite/favorite_view.dart
+// LAPISAN : Tampilan / Favorite Screen
+//
+// GUNANYA :
+//   Daftar karakter favorit. Dismissible = hapus dengan swipe (soal 4b),
+//   Snackbar setelah dihapus (4c), pesan jika daftar kosong (4d).
+//
+// DIPAKAI OLEH: Tab kedua di MainView.
+// ====================================================================
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -50,9 +61,11 @@ class FavoriteView extends GetView<FavoriteController> {
             );
           }
           final character = controller.favorites[index - 1];
+          // Dismissible membuat kartu bisa digeser (swipe) untuk dihapus.
           return Dismissible(
             key: ValueKey('favorite_${character.id}'),
             direction: DismissDirection.endToStart,
+            // Dipanggil setelah kartu selesai digeser: hapus + tampilkan Snackbar.
             onDismissed: (_) => controller.removeBySwipe(character),
             background: Container(
               alignment: Alignment.centerRight,

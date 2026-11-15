@@ -1,3 +1,15 @@
+// ====================================================================
+// FILE    : lib/app/modules/main/main_view.dart
+// LAPISAN : Tampilan / Halaman utama + Bottom Navigation Bar
+//
+// GUNANYA :
+//   Berisi 3 tab: Characters (Home), Favorites, Episodes (soal 6a).
+//   IndexedStack menjaga ketiga tab tetap hidup, jadi posisi scroll tidak
+//   hilang saat berpindah tab. Tombol logout + dialog konfirmasi ada di sini.
+//
+// DIPAKAI OLEH: Route /main.
+// ====================================================================
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

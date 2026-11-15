@@ -1,3 +1,14 @@
+// ====================================================================
+// FILE    : lib/app/utils/snack.dart
+// LAPISAN : Utilitas / Snackbar
+//
+// GUNANYA :
+//   Menampilkan Snackbar dari mana saja, termasuk dari controller yang tidak
+//   punya BuildContext, lewat GlobalKey scaffoldMessengerKey.
+//
+// DIPAKAI OLEH: AuthController, FavoriteController, HomeController, EpisodeController.
+// ====================================================================
+
 import 'package:flutter/material.dart';
 
 import '../theme/app_theme.dart';

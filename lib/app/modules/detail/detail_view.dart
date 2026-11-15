@@ -1,3 +1,14 @@
+// ====================================================================
+// FILE    : lib/app/modules/detail/detail_view.dart
+// LAPISAN : Tampilan / Detail Screen
+//
+// GUNANYA :
+//   Menampilkan foto, nama, status, spesies, gender, origin, location (soal 3a)
+//   dan tombol favorit yang ikon & teksnya berubah sesuai status (soal 3b-3d).
+//
+// DIPAKAI OLEH: Route /detail.
+// ====================================================================
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

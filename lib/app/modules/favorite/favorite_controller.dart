@@ -1,3 +1,16 @@
+// ====================================================================
+// FILE    : lib/app/modules/favorite/favorite_controller.dart
+// LAPISAN : Logika / Favorit (sumber data favorit global)
+//
+// GUNANYA :
+//   Hanya ADA SATU FavoriteController untuk seluruh aplikasi (permanent).
+//   Home, Detail, dan Favorite Screen membaca list 'favorites' yang sama
+//   lewat Obx, sehingga perubahan di satu halaman langsung terlihat di halaman
+//   lain (soal 6c). Setiap perubahan disimpan ke Shared Preferences (soal 4a).
+//
+// DIPAKAI OLEH: FavoriteButton, DetailView, FavoriteView, MainView (badge).
+// ====================================================================
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

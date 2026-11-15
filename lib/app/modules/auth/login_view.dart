@@ -1,3 +1,14 @@
+// ====================================================================
+// FILE    : lib/app/modules/auth/login_view.dart
+// LAPISAN : Tampilan / Halaman Login
+//
+// GUNANYA :
+//   Form username + password. Tombol Login memanggil AuthController.login().
+//   Tombol Daftar membuka Register; username yang baru dibuat diisi otomatis.
+//
+// DIPAKAI OLEH: Route /login.
+// ====================================================================
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

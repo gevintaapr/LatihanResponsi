@@ -1,3 +1,16 @@
+// ====================================================================
+// FILE    : lib/app/widgets/character_widgets.dart
+// LAPISAN : Tampilan / Widget karakter
+//
+// GUNANYA :
+//   CharacterGridCard : kartu di grid Home
+//   CharacterTile     : kartu horizontal di Favorite Screen
+//   FavoriteButton    : tombol hati; ikonnya berubah sesuai status favorit
+//                       karena dibungkus Obx (membaca FavoriteController).
+//
+// DIPAKAI OLEH: HomeView, FavoriteView.
+// ====================================================================
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

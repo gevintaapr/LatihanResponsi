@@ -1,3 +1,16 @@
+// ====================================================================
+// FILE    : lib/app/data/models/character.dart
+// LAPISAN : Data / Model
+//
+// GUNANYA :
+//   Cetakan (class) untuk satu karakter Rick and Morty.
+//   fromJson : mengubah JSON dari API menjadi objek Character.
+//   toJson   : mengubah objek menjadi JSON untuk disimpan sebagai favorit
+//              di Shared Preferences.
+//
+// DIPAKAI OLEH: ApiProvider, SessionService, semua controller dan halaman karakter.
+// ====================================================================
+
 /// Model karakter Rick and Morty.
 ///
 /// Bentuk JSON hasil [toJson] sengaja dibuat sama dengan bentuk JSON dari API,

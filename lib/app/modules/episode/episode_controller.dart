@@ -1,3 +1,13 @@
+// ====================================================================
+// FILE    : lib/app/modules/episode/episode_controller.dart
+// LAPISAN : Logika / Halaman Episode
+//
+// GUNANYA :
+//   Mengambil daftar episode dari GET /episode dengan pagination.
+//
+// DIPAKAI OLEH: EpisodeView.
+// ====================================================================
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -38,6 +48,7 @@ class EpisodeController extends GetxController {
     isLoading.value = true;
     errorMessage.value = null;
     try {
+      // GET /episode?page=1 (API mengirim 20 episode per halaman).
       final result = await _api.getEpisodes(page: 1);
       episodes.assignAll(result.items);
       _hasNext = result.hasNext;

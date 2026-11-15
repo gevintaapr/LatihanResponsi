@@ -1,3 +1,14 @@
+// ====================================================================
+// FILE    : lib/app/theme/app_theme.dart
+// LAPISAN : Tampilan / Tema
+//
+// GUNANYA :
+//   Satu tempat untuk semua warna, gradasi, radius sudut, dan ThemeData.
+//   Ubah warna di sini -> seluruh aplikasi ikut berubah (desain konsisten).
+//
+// DIPAKAI OLEH: Hampir semua halaman dan widget.
+// ====================================================================
+
 import 'package:flutter/material.dart';
 
 /// Palet warna tema glassmorphism (pink, ungu, kuning di atas latar pastel).

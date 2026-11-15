@@ -1,3 +1,16 @@
+// ====================================================================
+// FILE    : lib/app/modules/home/home_controller.dart
+// LAPISAN : Logika / Home Screen
+//
+// GUNANYA :
+//   Mengambil daftar karakter dari API dan menyimpan state halaman:
+//     characters, isLoading, errorMessage, selectedStatuses, query.
+//   Fitur: filter status (bisa lebih dari satu), pencarian nama dengan
+//   debounce, infinite scroll (pagination), dan pull-to-refresh.
+//
+// DIPAKAI OLEH: HomeView.
+// ====================================================================
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

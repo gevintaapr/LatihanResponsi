@@ -8,6 +8,8 @@ Penjelasan langkah demi langkah (dari `flutter create` sampai semua halaman) ada
 
 Latihan menyesuaikan model dan API provider dengan API lain ada di [`docs/LATIHAN_API.md`](docs/LATIHAN_API.md).
 
+Tugas praktik menambahkan API TVmaze ke project ini ada di [`docs/TUGAS_TVMAZE.md`](docs/TUGAS_TVMAZE.md).
+
 ## Menjalankan
 
 ```bash

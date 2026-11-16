@@ -2,6 +2,8 @@
 
 Panduan ini menjelaskan cara aplikasi ini dibuat, **urut dari nol**: membuat project, memasang package, menghubungkan API, sampai semua halaman jadi. Setiap langkah menyebutkan **file mana** yang dibuat dan **apa gunanya**.
 
+Untuk latihan memakai API lain, lihat [`LATIHAN_API.md`](LATIHAN_API.md).
+
 Setiap file `.dart` di folder `lib/` juga punya blok komentar di bagian paling atas (FILE, LAPISAN, GUNANYA, DIPAKAI OLEH). Buka file-nya sambil membaca panduan ini.
 
 ---

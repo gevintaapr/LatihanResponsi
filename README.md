@@ -6,6 +6,8 @@ Latihan responsi mobile — Flutter + Dart dengan GetX (state management, routin
 
 Penjelasan langkah demi langkah (dari `flutter create` sampai semua halaman) ada di [`docs/PANDUAN.md`](docs/PANDUAN.md).
 
+Latihan menyesuaikan model dan API provider dengan API lain ada di [`docs/LATIHAN_API.md`](docs/LATIHAN_API.md).
+
 ## Menjalankan
 
 ```bash
